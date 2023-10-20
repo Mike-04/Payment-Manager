@@ -1,7 +1,7 @@
-payments={}
-import random
-changes=[]
 
+import random
+import pprint
+payments={}
 '''
 changes=[
 {'op':'ADD','nr':nr,'init':{},'fin':{}}
@@ -51,43 +51,38 @@ def UNDO(payments:dict,changes:list):
                         case 'ADD':
                                 inDEL(nr,changes)
                 del changes[-1]  
-ADD(0,{'gas': 10,'water':10,'heat':10,'sewer':10,'misc':10},changes)
-ADD(1,{'gas': 10,'water':10,'heat':10,'sewer':10,'misc':10},changes)
-ADD(2,{'gas': 10,'water':10,'heat':10,'sewer':10,'misc':10},changes)
-DEL(2,changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-print('start undo')
-UNDO(payments,changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-UNDO(payments,changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-UNDO(payments,changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-ADD(2,{'gas': 10,'water':10,'heat':10,'sewer':10,'misc':10},changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-ADD(2,{'gas': 11,'water':11,'heat':11,'sewer':11,'misc':11},changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-UNDO(payments,changes)
-print(payments)
-print('----------------------------------------')
-print(changes)
-print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
+def main():
+
+        changes=[]
+
+        while(True):
+                print("Choices:")
+                print("1: Adds or modifies an entry")
+                print("2: Deletes an entry")
+                print("3: Undo")
+                print("4: Prints list")
+                print("5: Exits the program")
+                req=int(input("Make a selection: "))
+                match req:
+                        case 1:
+                                nr=int(input("Nr:"))
+                                gas=int(input("Gas:"))
+                                water=int(input("Water:"))
+                                heat=int(input("Heat:"))
+                                sewage=int(input("Sewage:"))
+                                misc=int(input("Misc:"))
+                                ADD(nr,{'gas': gas,'water':water,'heat':heat,'sewage':sewage,'misc':misc},changes)
+                        case 2:
+                                nr=int(input("Nr:"))
+                                DEL(nr,changes)
+                        case 3:
+                                UNDO(payments,changes)
+                        case 4:
+                                pprint.pprint(payments)
+                        case 5:
+                                break
+                        case _:
+                                print("Invalid input!")
+
+main()
