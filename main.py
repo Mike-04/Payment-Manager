@@ -72,23 +72,23 @@ def mass_MOD(payments,start,end,key,value,changes):
 '''Getters'''
 def get_gas_value(nr,payments):
         if nr in payments:
-              return payments[nr]['gas']
+              return float(payments[nr]['gas'])
                      
 def get_water_value(nr,payments):
         if nr in payments:
-              return payments[nr]['water']
+              return float(payments[nr]['water'])
              
 def get_heat_value(nr,payments):
         if nr in payments:
-              return payments[nr]['heat']
+              return float(payments[nr]['heat'])
                 
 def get_sewage_value(nr,payments):
         if nr in payments:
-              return payments[nr]['sewage']
+              return float(payments[nr]['sewage'])
                 
 def get_misc_value(nr,payments):
         if nr in payments:
-              return payments[nr]['misc']
+              return float(payments[nr]['misc'])
 
 def get_date_value_str(nr,payments):
         if nr in payments:
@@ -153,7 +153,28 @@ def print_ap(payments,nr):
                 print("Sewage:",get_sewage_value(nr,payments))
                 print("Misc:",get_misc_value(nr,payments))
         else:
-                print("No payments for the apartment nr:",nr)                
+                print("No payments for the apartment nr:",nr)
+
+def print_grt(payments,value):
+        print("Apartmennts with payments more than:",value,"are:")
+        for nr in payments:
+                gas=get_gas_value(nr,payments)
+                water=get_water_value(nr,payments)
+                heat=get_heat_value(nr,payments)
+                sewage=get_sewage_value(nr,payments)
+                misc=get_misc_value(nr,payments)
+                if gas > value or water > value or heat > value or sewage > value or misc > value:
+                       print("Apartment",nr)      
+
+def print_all_key(payments,key):
+        for nr in payments:
+                print("Apartment number:",nr,"has to pay:",payments[nr][key],"for:",key) 
+
+def total_by_key(payments,key):
+        total=0
+        for nr in payments:
+                total+=payments[nr][key]
+        print("The total for the:",key,"is",total)
 
 def run():
         changes=[]
@@ -183,6 +204,8 @@ def run():
                                 print("----------------------------------")
                                 pprint.pprint(payments)
                                 print("----------------------------------")
+                                key=input("Input key:")
+                                total_by_key(payments,key)
                         case 5:
                                 break
                         case _:
