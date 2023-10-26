@@ -5,6 +5,15 @@ import datetime
 
 '''Operations'''
 def ADD(payments:dict,nr:int,val:dict,changes:list):
+        '''
+        The `ADD` function updates a payment dictionary and records the type of operation ('MOD' or 'ADD').
+        args:
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment that has to be modified
+        val(dict):value to be intorduced or modified
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
         op='MOD'
         if nr not in payments:
                 payments[nr]=val
@@ -16,6 +25,14 @@ def ADD(payments:dict,nr:int,val:dict,changes:list):
                 payments[nr].update(val)
 
 def DEL(payments:dict,nr:int,changes:list):
+        '''
+        The `DEL` function deletes a payment dictionary and records the type of operation.
+        args:
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment that has to be modified
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
         if nr in payments:
                 op='DEL'
                 init=payments[nr].copy()
@@ -23,25 +40,62 @@ def DEL(payments:dict,nr:int,changes:list):
                 del(payments[nr])
 
 def mass_DEL(payments,start,end,changes):
+        '''
+        The `mass_DEL` function deletes payments between the indexes start and end records the type of operation.
+        args:
+        payments(dict):dictionary of all payments
+        start,end(int):indexes where apartments are to be deleted
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
         for nr in range (start, end+1):
               DEL(payments,nr,changes)
         changes.append({'op':'mDEL','nr':end-start+1,'init':'NaN','fin':'NaN'}) 
 
 def mass_UNDO(payments,changes,rec):
-       for i in range(0,rec):
+        '''
+        The mass_UNDO function iteratively undoes changes in a payment dictionary based on a specified number of records (rec).
+        payments(dict):dictionary of all payments
+        rec(int):number of undos to be made
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
+        for i in range(0,rec):
               UNDO(payments,changes)
 
 def inDEL(payments:dict,nr:int):
+        '''
+        The `inDEL` function deletes a payment dictionary.
+        args:
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment that has to be modified
+        returns nothing
+        '''
         if nr in payments:
                 del(payments[nr])
 
 def inADD(payments:dict,nr:int,val:dict):
+        '''
+        The `inADD` function updates a payment dictionary.
+        args:
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment that has to be modified
+        val(dict):value to be intorduced or modified
+        returns nothing
+        '''
         if nr not in payments:
                 payments[nr]=val
         else:
                 payments[nr].update(val)
 
 def UNDO(payments:dict,changes:list):
+        '''
+        The UNDO function reverses the most recent payment operation recorded in the changes list and updates the payments dictionary accordingly
+        args:
+        payments(dict):dictionary of all payments
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
         if len(changes):
                 op=changes[len(changes)-1]['op']
                 nr=changes[len(changes)-1]['nr']
@@ -64,6 +118,16 @@ def UNDO(payments:dict,changes:list):
                print("Nothing to undo")
 
 def mass_MOD(payments,start,end,key,value,changes):
+        '''
+        The mass_MOD function iteratively modifies payment information within a specified range and records a 'mMOD' operation in the changes list to indicate the mass modification.
+        args:
+        payments(dict):dictionary of all payments
+        start,end(int):indexes where apartments are to be modiffied
+        key:key to be modified 
+        value:new value of the key to be modified 
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
         for nr in range(start,end+1):
                 if nr in payments:
                         ADD(payments,nr,{key:value},changes)
@@ -71,30 +135,72 @@ def mass_MOD(payments,start,end,key,value,changes):
                        
 '''Getters'''
 def get_gas_value(nr,payments):
+        '''
+        The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns:value requested
+        '''
         if nr in payments:
               return float(payments[nr]['gas'])
                      
 def get_water_value(nr,payments):
+        '''
+        The get_gas_value function retrieves the water value for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns:value requested
+        '''
         if nr in payments:
               return float(payments[nr]['water'])
              
 def get_heat_value(nr,payments):
+        '''
+        The get_gas_value function retrieves the heat value for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from\
+        returns:value requested
+        '''
         if nr in payments:
               return float(payments[nr]['heat'])
                 
 def get_sewage_value(nr,payments):
+        '''
+        The get_gas_value function retrieves the sewage value for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns:value requested
+        '''
         if nr in payments:
               return float(payments[nr]['sewage'])
                 
 def get_misc_value(nr,payments):
+        '''
+        The get_gas_value function retrieves the misc value for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns:value requested
+        '''
         if nr in payments:
               return float(payments[nr]['misc'])
 
 def get_date_value_str(nr,payments):
+        '''
+        The get_gas_value function retrieves the date value as string for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns:value requested
+        '''
         if nr in payments:
                 return payments[nr]['date'].strftime("%x")
                 
 def get_total_value(nr,payments):
+        '''
+        The get_gas_value function calculates the total for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns: total
+        '''
         total=0
         total+=get_gas_value(nr,payments)
         total+=get_water_value(nr,payments)
@@ -105,6 +211,11 @@ def get_total_value(nr,payments):
 
 '''Readers'''
 def key_selector():
+        '''
+        The key_selector function prompts the user to select a key (e.g., 'gas', 'water', 'heat', 'sewage', 'misc') and returns the selected key based on the user's input.
+        args: none
+        returns: selected key as a string based on the user's input.
+        '''
         print("select one of the following:")
         print("Gas:1")
         print("Water:2")
@@ -125,20 +236,35 @@ def key_selector():
                       return 'misc'
 
 def read_float(msg:str):
-    while True:
-        try :
-            return float(input(msg))
-        except ValueError:
-            print("Invalid value")
+        '''
+        read_float function prompts the user to input a float value and handles any input errors.
+        msg(str): The message to display as a prompt to the user.
+        returns:float value entered by the user.
+        '''
+        while True:
+                try :
+                        return float(input(msg))
+                except ValueError:
+                        print("Invalid value")
             
 def read_int(msg:str):
-    while True:
-        try :
-            return int(input(msg))
-        except ValueError:
-            print("Invalid value")
+        '''
+        read_int function prompts the user to input a int value and handles any input errors.
+        msg(str): The message to display as a prompt to the user.
+        returns:int value entered by the user.
+        '''
+        while True:
+                try :
+                        return int(input(msg))
+                except ValueError:
+                        print("Invalid value")
 
 def read_date():
+        '''
+        read_date function prompts the user to input a date or autocompletes with todays date and handles any input errors.
+        args:none
+        returns:date entered by the user.
+        '''
         while True:
                 str=input("Input date in dd/mm/yyyy or leave blank for todays date:")
                 if(str != ""):
@@ -154,6 +280,12 @@ def read_date():
         return dt
 
 def input_payment(payments:dict,changes:list):
+        '''
+        input_payment function allows the user to input payment information and updates the 'payments' dictionary.
+        payments(dict):dictionary of all payments
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
         nr=read_int("Nr:")
         gas=read_float("Gas:")
         water=read_float("Water:")
@@ -165,6 +297,12 @@ def input_payment(payments:dict,changes:list):
 
 '''Printers'''
 def print_ap(payments,nr):
+        '''
+        print_ap function prints all the payments from an apartment.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns nothing
+        '''
         if nr in payments:
                 print("Apartment nr",nr,"has the following payments from date",get_date_value_str(nr,payments))
                 print("Gas:",get_gas_value(nr,payments))
@@ -176,6 +314,12 @@ def print_ap(payments,nr):
                 print("No payments for the apartment nr:",nr)
 
 def print_grt(payments,value):
+        '''
+        print_grt function prints all the apartments with payments greater than a value.
+        payments(dict):dictionary of all payments
+        value(float):value for comparison
+        returns nothing
+        '''
         print("Apartments with payments more than:",value,"are:")
         for nr in payments:
                 gas=get_gas_value(nr,payments)
@@ -187,10 +331,22 @@ def print_grt(payments,value):
                        print("Apartment",nr)      
 
 def print_all_key(payments,key):
+        '''
+        print_all_key function displays payment information for a specific key (e.g., 'gas', 'water', 'heat') from all apartments.
+        payments (dict): A dictionary containing payment information for multiple apartments.
+        key (str): The payment category to be displayed (e.g., 'gas', 'water', 'heat').
+        returns nothing
+        '''
         for nr in payments:
                 print("Apartment number:",nr,"paid:",payments[nr][key],"for:",key) 
 
 def total_by_key(payments,key):
+        '''
+        total_by_key function displays total sum for a specific key (e.g., 'gas', 'water', 'heat') for all apartments.
+        payments (dict): A dictionary containing payment information for multiple apartments.
+        key (str): The payment category to be displayed (e.g., 'gas', 'water', 'heat').
+        returns nothing
+        '''
         total=0
         for nr in payments:
                 total+=payments[nr][key]
@@ -306,7 +462,7 @@ def run():
                                 break
                         case 86:
                                 while(True):
-                                        print("DEV MODE!")
+                                        print("DEV MODE-Activated :)")
                                         print("Choices:")
                                         print("1: Add a random apartment to the list")
                                         print("2: Delete an apartment")
@@ -335,6 +491,7 @@ def run():
                                                 case 6:
                                                         pprint.pprint(changes)
                                                 case 7:
+                                                        print("DEV MODE-Deactivated :)")
                                                         break
                                                 case _:
                                                         print("R U rlly a DEV?")
