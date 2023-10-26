@@ -104,6 +104,26 @@ def get_total_value(nr,payments):
         return total
 
 '''Readers'''
+def key_selector():
+        print("select one of the following:")
+        print("Gas:1")
+        print("Water:2")
+        print("Heat:3")
+        print("Sewage:4")
+        print("Miscellaneous:5")
+        val=read_int("Value:")
+        match val:
+                case 1:
+                      return 'gas'
+                case 2:
+                      return 'water'
+                case 3:
+                      return 'heat'
+                case 4:
+                      return 'sewage'
+                case 5:
+                      return 'misc'
+
 def read_float(msg:str):
     while True:
         try :
@@ -156,7 +176,7 @@ def print_ap(payments,nr):
                 print("No payments for the apartment nr:",nr)
 
 def print_grt(payments,value):
-        print("Apartmennts with payments more than:",value,"are:")
+        print("Apartments with payments more than:",value,"are:")
         for nr in payments:
                 gas=get_gas_value(nr,payments)
                 water=get_water_value(nr,payments)
@@ -168,7 +188,7 @@ def print_grt(payments,value):
 
 def print_all_key(payments,key):
         for nr in payments:
-                print("Apartment number:",nr,"has to pay:",payments[nr][key],"for:",key) 
+                print("Apartment number:",nr,"paid:",payments[nr][key],"for:",key) 
 
 def total_by_key(payments,key):
         total=0
@@ -182,32 +202,142 @@ def run():
         while(True):
                 #pprint.pprint(changes)
                 print("Choices:")
-                print("1: Adds or modifies an entry")
-                print("2: Deletes an entry")
-                print("3: Undo")
-                print("4: Prints list")
-                print("5: Exits the program")
-                req=int(input("Make a selection: "))
+                print("1: Add/Modify")
+                print("2: Delete")
+                print("3: Search")
+                print("4: Raports")
+                print("5: Filters")
+                print("6: Undo")
+                print("7: Exit")
+                req=read_int("Make selection:")
                 match req:
                         case 1:
                                 input_payment(payments,changes)
                         case 2:
-                                start=int(input("Start:"))
-                                end=int(input("End:"))
-                                key=input("Key:")
-                                value=read_float("Value")
-                                mass_MOD(payments,start,end,key,value,changes)
+                                while(True):
+                                        print("Choices:")
+                                        print("1: Delete entries for an apartment")
+                                        print("2: Delete entries in range")
+                                        print("3: Delete all payments for a certain utility")
+                                        print("4: Exit")
+                                        sub_req=read_int("Make selection:")
+                                        match sub_req:
+                                                case 1:
+                                                        nr=read_int("Enter apartment number:")
+                                                        DEL(payments,nr,changes)
+                                                case 2:
+                                                        start=read_int("Start:")
+                                                        end=read_int("End:")
+                                                        mass_DEL(payments,start,end,changes)
+                                                case 3:
+                                                        key=key_selector()
+                                                        start=min(payments)
+                                                        end=max(payments)
+                                                        mass_MOD(payments,start,end,key,0.0,changes)
+                                                case 4:
+                                                        break
+                                                case _:
+                                                        print("Invalid input!")
                         case 3:
-                                UNDO(payments,changes)
+                                while(True):
+                                        print("Choices:")
+                                        print("1: Shows all apartments with utilities over a inputed value")
+                                        print("2: Shows a certain uitilty for all apartaments")
+                                        print("3: Shows all utilies paid before a inputed date and over a inputed value")
+                                        print("4: Exit")
+                                        sub_req=read_int("Make selection:")
+                                        match sub_req:
+                                                case 1:
+                                                        val=read_float("Enter the value:")
+                                                        print_grt(payments,val)
+                                                case 2:
+                                                        key=key_selector()
+                                                        print_all_key(payments,key)
+                                                case 3:
+                                                        pass
+                                                case 4:
+                                                        break
+                                                case _:
+                                                        print("Invalid input!")
                         case 4:
-                                pprint.pprint(changes)
-                                print("----------------------------------")
-                                pprint.pprint(payments)
-                                print("----------------------------------")
-                                key=input("Input key:")
-                                total_by_key(payments,key)
+                                while(True):
+                                        print("Choices:")
+                                        print("1: Shows all apartments with utilities over a inputed value")
+                                        print("2: Shows a certain uitilty for all apartaments")
+                                        print("3: Calculates total payments for an apartment")
+                                        print("4: Exit")
+                                        sub_req=read_int("Make selection:")
+                                        match sub_req:
+                                                case 1:
+                                                        val=read_float("Enter the value:")
+                                                        print_grt(payments,val)
+                                                case 2:
+                                                        key=key_selector()
+                                                        print_all_key(payments,val)
+                                                case 3:
+                                                        nr=read_int("Enter apartment number:")
+                                                        print("Total for apartment:",nr,"is",get_total_value(nr,payments))
+                                                case 4:
+                                                        break
+                                                case _:
+                                                        print("Invalid input!")
                         case 5:
+                                while(True):
+                                        print("Choices:")
+                                        print("1: Delete all payments for a certain utility")
+                                        print("2: Delete all payments under a certain value")
+                                        print("3: Exit")
+                                        sub_req=read_int("Make selection:")
+                                        match sub_req:
+                                                case 1:
+                                                        key=key_selector()
+                                                        start=min(payments)
+                                                        end=max(payments)
+                                                        mass_MOD(payments,start,end,key,0.0,changes)
+                                                case 2:
+                                                        pass
+                                                case 3:
+                                                        break
+                                                case _:
+                                                        print("Invalid input!")
+                        case 6:
+                                UNDO(payments,changes)
+                        case 7:
                                 break
+                        case 86:
+                                while(True):
+                                        print("DEV MODE!")
+                                        print("Choices:")
+                                        print("1: Add a random apartment to the list")
+                                        print("2: Delete an apartment")
+                                        print("3: Delete all apartments")
+                                        print("4: Undo")
+                                        print("5: PPrint all apartments")
+                                        print("6: PPrint all changes")
+                                        print("7: Exit")
+                                        sub_req=read_int("Make selection:")
+                                        match sub_req:
+                                                case 1:
+                                                        nr=random.randint(1,20)
+                                                        ADD(payments,nr,{'gas': float(random.randint(1,20)),'water':float(random.randint(1,20)),'heat':float(random.randint(1,20)),'sewage':float(random.randint(1,20)),'misc':float(random.randint(1,20)),'date':datetime.date.today()},changes)
+                                                        pprint.pprint(payments[nr])
+                                                case 2:
+                                                        nr=read_int("Apartment number:")
+                                                        DEL(payments,nr,changes)
+                                                case 3:
+                                                        start=min(payments)
+                                                        end=max(payments)
+                                                        mass_DEL(payments,start,end,changes)
+                                                case 4:
+                                                        UNDO(payments,changes)
+                                                case 5:
+                                                        pprint.pprint(payments)
+                                                case 6:
+                                                        pprint.pprint(changes)
+                                                case 7:
+                                                        break
+                                                case _:
+                                                        print("R U rlly a DEV?")
                         case _:
                                 print("Invalid input!")
 
