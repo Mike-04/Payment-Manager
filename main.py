@@ -132,7 +132,40 @@ def mass_MOD(payments,start,end,key,value,changes):
                 if nr in payments:
                         ADD(payments,nr,{key:value},changes)
         changes.append({'op':'mMOD','nr':end-start+1,'init':'NaN','fin':'NaN'})
-                       
+
+def del_under_value(payments,value,changes):
+        '''
+        The del_under_value function iteratively modifies payment information under a certain value and records a 'mMOD' operation in the changes list to indicate the mass modification.
+        args:
+        payments(dict):dictionary of all payments
+        value: value for comparison
+        changes(list):list where changes are recorded
+        returns nothing
+        '''
+        nrc=0
+        for nr in payments:
+                gas=get_gas_value(nr,payments)
+                water=get_water_value(nr,payments)
+                heat=get_heat_value(nr,payments)
+                sewage=get_sewage_value(nr,payments)
+                misc=get_misc_value(nr,payments)
+                if(gas<value):
+                        ADD(payments,nr,{'gas':0.0},changes)
+                        nrc+=1
+                if(water<value):
+                        ADD(payments,nr,{'water':0.0},changes)
+                        nrc+=1
+                if(heat<value):
+                        ADD(payments,nr,{'heat':0.0},changes)
+                        nrc+=1
+                if(sewage<value):
+                        ADD(payments,nr,{'sewage':0.0},changes)
+                        nrc+=1
+                if(misc<value):
+                        ADD(payments,nr,{'misc':0.0},changes)
+                        nrc+=1    
+        changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})    
+
 '''Getters'''
 def get_gas_value(nr,payments):
         '''
@@ -367,6 +400,7 @@ def auto_testing():
                         date=datetime.date.today()
                         test={'gas': gas,'water':water,'heat':heat,'sewage':sewage,'misc':misc,'date':date}
                         ADD(sb_payments,nr,test,sb_changes)
+                        assert(sb_payments[nr]==test)
                 sb_payments_c=sb_payments
                 mass_MOD(sb_payments,min(sb_payments),max(sb_payments), random.choice(keys), float(random.randint(0,100)), sb_changes)
                 UNDO(sb_payments,sb_changes)
@@ -476,7 +510,8 @@ def run():
                                                         end=max(payments)
                                                         mass_MOD(payments,start,end,key,0.0,changes)
                                                 case 2:
-                                                        pass
+                                                        val=read_float("Input value:")
+                                                        del_under_value(payments,val,changes)
                                                 case 3:
                                                         break
                                                 case _:
