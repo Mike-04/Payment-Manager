@@ -363,6 +363,13 @@ def print_grt(payments,value):
                 if gas > value or water > value or heat > value or sewage > value or misc > value:
                        print("Apartment",nr)      
 
+def print_date_value(payments,date,value):
+        print("Apartments with payments before",date)
+        for nr in payments:
+                total=get_total_value(nr,payments)
+                if total>value and payments[nr]['date']<date:
+                        print("Apartment nr:",nr)
+
 def print_all_key(payments,key):
         '''
         print_all_key function displays payment information for a specific key (e.g., 'gas', 'water', 'heat') from all apartments.
@@ -469,7 +476,9 @@ def run():
                                                         key=key_selector()
                                                         print_all_key(payments,key)
                                                 case 3:
-                                                        pass
+                                                        dt=read_date()
+                                                        val=read_float("Input value:")
+                                                        print_date_value(payments,dt,val)
                                                 case 4:
                                                         break
                                                 case _:
@@ -557,5 +566,6 @@ def run():
                                                         print("R U rlly a DEV?")
                         case _:
                                 print("Invalid input!")
+
 auto_testing()
 run()
