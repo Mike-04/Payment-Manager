@@ -177,7 +177,15 @@
       - `key` (str): The payment category to be displayed (e.g., 'gas', 'water', 'heat').
     - Returns: Nothing
 
-25. **auto_testing()**
+25. **del_under_value()**
+    - The del_under_value function iteratively modifies payment information under a certain value and records a 'mMOD' operation in the changes list to indicate the mass modification.
+    - Arguments:
+         - `payments` (dict): A dictionary of all payments.
+         - `value` (float): The value for comparison.
+         - `changes` (list): A list where changes are recorded.
+    - Returns: None
+
+26. **auto_testing()**
     - Description: The `auto_testing` function automatically runs tests in a sandbox environment using random values to test various functions in your program.
     - Arguments: None
     - Returns: None
