@@ -14,11 +14,12 @@ def ADD(payments:dict,nr:int,val:dict,changes:list):
         changes(list):list where changes are recorded
         returns nothing
         '''
+        template={'gas':0,'water':0,'heat':0,'sewage':0,'misc':0,'date':'NaN'}
         op='MOD'
         if nr not in payments:
                 payments[nr]=val
                 op='ADD'
-                changes.append({'op':op,'nr':nr,'init':{'gas':0,'water':0,'heat':0,'sewage':0,'misc':0,'date':'NaN'},'fin':val})
+                changes.append({'op':op,'nr':nr,'init':template,'fin':val})
         else:
                 init=payments[nr].copy()
                 changes.append({'op':op,'nr':nr,'init':init,'fin':val}) 
@@ -38,6 +39,8 @@ def DEL(payments:dict,nr:int,changes:list):
                 init=payments[nr].copy()
                 changes.append({'op':op,'nr':nr,'init':init,'fin':'NaN'}) 
                 del(payments[nr])
+        else:
+                raise IndexError("Index not in payments")
 
 def mass_DEL(payments,start,end,changes):
         '''
@@ -48,9 +51,14 @@ def mass_DEL(payments,start,end,changes):
         changes(list):list where changes are recorded
         returns nothing
         '''
+        chg=0
         for nr in range (start, end+1):
-              DEL(payments,nr,changes)
-        changes.append({'op':'mDEL','nr':end-start+1,'init':'NaN','fin':'NaN'}) 
+                try:
+                        DEL(payments,nr,changes)
+                        chg+=1
+                except:
+                        pass
+        changes.append({'op':'mDEL','nr':chg,'init':'NaN','fin':'NaN'}) 
 
 def mass_UNDO(payments,changes,rec):
         '''
@@ -191,7 +199,7 @@ def get_heat_value(nr,payments):
         '''
         The get_gas_value function retrieves the heat value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from\
+        nr(int):number of apartment to retrive values from
         returns:value requested
         '''
         if nr in payments:
@@ -241,6 +249,16 @@ def get_total_value(nr,payments):
         total+=get_sewage_value(nr,payments)
         total+=get_misc_value(nr,payments)
         return total
+
+def validate_entry(entry):
+        if entry['gas']<0 or entry['water']<0 or entry['heat']<0 or entry['sewage']<0 or entry['misc']<0:
+                raise ValueError("Value can't be smaller than 0")
+
+
+
+def payment_creator(gas,water,heat,sewage,misc,date):
+        entry={'gas': gas,'water':water,'heat':heat,'sewage':sewage,'misc':misc,'date':date}
+        return entry
 
 '''Readers'''
 def key_selector():
@@ -326,7 +344,13 @@ def input_payment(payments:dict,changes:list):
         sewage=read_float("Sewage:")
         misc=read_float("Misc:")
         date=read_date()
-        ADD(payments,nr,{'gas': gas,'water':water,'heat':heat,'sewage':sewage,'misc':misc,'date':date},changes)        
+        entry=payment_creator(gas,water,heat,sewage,misc,date)
+        try:
+                validate_entry(entry)
+                ADD(payments,nr,entry,changes)
+        except ValueError as ve:
+                print(ve)
+        
 
 '''Printers'''
 def print_ap(payments,nr):
