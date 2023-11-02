@@ -42,7 +42,7 @@ def DEL(payments:dict,nr:int,changes:list):
         else:
                 raise IndexError("Index not in payments")
 
-def mass_DEL(payments,start,end,changes):
+def mass_del(payments,start,end,changes):
         '''
         The `mass_DEL` function deletes payments between the indexes start and end records the type of operation.
         args:
@@ -60,7 +60,7 @@ def mass_DEL(payments,start,end,changes):
                         pass
         changes.append({'op':'mDEL','nr':chg,'init':'NaN','fin':'NaN'}) 
 
-def mass_UNDO(payments,changes,rec):
+def mass_undo(payments,changes,rec):
         '''
         The mass_UNDO function iteratively undoes changes in a payment dictionary based on a specified number of records (rec).
         payments(dict):dictionary of all payments
@@ -118,14 +118,14 @@ def UNDO(payments:dict,changes:list):
                         case 'ADD':
                                 inDEL(payments,nr)
                         case 'mDEL':
-                                mass_UNDO(payments,changes,nr)
+                                mass_undo(payments,changes,nr)
                         case 'mMOD':
-                                mass_UNDO(payments,changes,nr)
+                                mass_undo(payments,changes,nr)
                 
         else:
                print("Nothing to undo")
 
-def mass_MOD(payments,start,end,key,value,changes):
+def mass_mod(payments,start,end,key,value,changes):
         '''
         The mass_MOD function iteratively modifies payment information within a specified range and records a 'mMOD' operation in the changes list to indicate the mass modification.
         args:
@@ -433,10 +433,10 @@ def auto_testing():
                         ADD(sb_payments,nr,test,sb_changes)
                         assert(sb_payments[nr]==test)
                 sb_payments_c=sb_payments
-                mass_MOD(sb_payments,min(sb_payments),max(sb_payments), random.choice(keys), float(random.randint(0,100)), sb_changes)
+                mass_mod(sb_payments,min(sb_payments),max(sb_payments), random.choice(keys), float(random.randint(0,100)), sb_changes)
                 UNDO(sb_payments,sb_changes)
                 assert(sb_payments==sb_payments_c)
-                mass_DEL(sb_payments,min(sb_payments),max(sb_payments),sb_changes)
+                mass_del(sb_payments,min(sb_payments),max(sb_payments),sb_changes)
                 assert(sb_payments=={})
                 UNDO(sb_payments,sb_changes)
                 assert(sb_payments==sb_payments_c)
@@ -474,12 +474,12 @@ def run():
                                                 case 2:
                                                         start=read_int("Start:")
                                                         end=read_int("End:")
-                                                        mass_DEL(payments,start,end,changes)
+                                                        mass_del(payments,start,end,changes)
                                                 case 3:
                                                         key=key_selector()
                                                         start=min(payments)
                                                         end=max(payments)
-                                                        mass_MOD(payments,start,end,key,0.0,changes)
+                                                        mass_mod(payments,start,end,key,0.0,changes)
                                                 case 4:
                                                         break
                                                 case _:
@@ -541,7 +541,7 @@ def run():
                                                         key=key_selector()
                                                         start=min(payments)
                                                         end=max(payments)
-                                                        mass_MOD(payments,start,end,key,0.0,changes)
+                                                        mass_mod(payments,start,end,key,0.0,changes)
                                                 case 2:
                                                         val=read_float("Input value:")
                                                         del_under_value(payments,val,changes)
@@ -576,7 +576,7 @@ def run():
                                                 case 3:
                                                         start=min(payments)
                                                         end=max(payments)
-                                                        mass_DEL(payments,start,end,changes)
+                                                        mass_del(payments,start,end,changes)
                                                 case 4:
                                                         UNDO(payments,changes)
                                                 case 5:
