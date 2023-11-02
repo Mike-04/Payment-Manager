@@ -26,4 +26,17 @@ def auto_testing():
                 assert(sb_payments=={})
                 bussines.UNDO(sb_payments,sb_changes)
                 assert(sb_payments==sb_payments_c)
+                gas=float(random.randint(-100,100))
+                water=float(random.randint(-100,100))
+                heat=float(random.randint(-100,100))
+                sewage=float(random.randint(-100,100))
+                misc=float(random.randint(-100,100))
+                date=datetime.date.today()
+                entry=service.payment_creator(gas,water,heat,sewage,misc,date)
+                try:
+                        service.validate_entry(entry)
+                        if(gas<0 or water<0 or heat<0 or sewage<0 or misc<0):
+                                assert(False)
+                except:
+                        assert(True)
 
