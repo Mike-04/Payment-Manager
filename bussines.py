@@ -1,3 +1,4 @@
+import service
 
 def inDEL(payments:dict,nr:int):
         '''
@@ -46,9 +47,9 @@ def UNDO(payments:dict,changes:list):
                         case 'ADD':
                                 inDEL(payments,nr)
                         case 'mDEL':
-                                mass_undo(payments,changes,nr)
+                                service.mass_undo(payments,changes,nr)
                         case 'mMOD':
-                                mass_undo(payments,changes,nr)
+                                service.mass_undo(payments,changes,nr)
                 
         else:
                print("Nothing to undo")

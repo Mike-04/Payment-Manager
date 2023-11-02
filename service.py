@@ -1,3 +1,5 @@
+import bussines
+
 def get_gas_value(nr,payments):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
@@ -97,7 +99,7 @@ def mass_mod(payments,start,end,key,value,changes):
         '''
         for nr in range(start,end+1):
                 if nr in payments:
-                        ADD(payments,nr,{key:value},changes)
+                        bussines.ADD(payments,nr,{key:value},changes)
         changes.append({'op':'mMOD','nr':end-start+1,'init':'NaN','fin':'NaN'})
 
 def del_under_value(payments,value,changes):
@@ -117,19 +119,19 @@ def del_under_value(payments,value,changes):
                 sewage=get_sewage_value(nr,payments)
                 misc=get_misc_value(nr,payments)
                 if(gas<value):
-                        ADD(payments,nr,{'gas':0.0},changes)
+                        bussines.ADD(payments,nr,{'gas':0.0},changes)
                         nrc+=1
                 if(water<value):
-                        ADD(payments,nr,{'water':0.0},changes)
+                        bussines.ADD(payments,nr,{'water':0.0},changes)
                         nrc+=1
                 if(heat<value):
-                        ADD(payments,nr,{'heat':0.0},changes)
+                        bussines.ADD(payments,nr,{'heat':0.0},changes)
                         nrc+=1
                 if(sewage<value):
-                        ADD(payments,nr,{'sewage':0.0},changes)
+                        bussines.ADD(payments,nr,{'sewage':0.0},changes)
                         nrc+=1
                 if(misc<value):
-                        ADD(payments,nr,{'misc':0.0},changes)
+                        bussines.ADD(payments,nr,{'misc':0.0},changes)
                         nrc+=1    
         changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})  
 
@@ -145,7 +147,7 @@ def mass_del(payments,start,end,changes):
         chg=0
         for nr in range (start, end+1):
                 try:
-                        DEL(payments,nr,changes)
+                        bussines.DEL(payments,nr,changes)
                         chg+=1
                 except:
                         pass
@@ -160,5 +162,13 @@ def mass_undo(payments,changes,rec):
         returns nothing
         '''
         for i in range(0,rec):
-              UNDO(payments,changes)
+              bussines.UNDO(payments,changes)
+
+def add_payment(payments,nr,entry,changes):
+        bussines.ADD(payments,nr,entry,changes)
+
+def del_payment(payments,nr,changes):
+        bussines.DEL(payments,nr,changes)
   
+def undo_service(payments,changes):
+        bussines.UNDO(payments,changes)

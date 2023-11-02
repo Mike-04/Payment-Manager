@@ -1,3 +1,5 @@
+import service
+import datetime 
 def print_ap(payments,nr):
         '''
         print_ap function prints all the payments from an apartment.
@@ -6,12 +8,12 @@ def print_ap(payments,nr):
         returns nothing
         '''
         if nr in payments:
-                print("Apartment nr",nr,"has the following payments from date",get_date_value_str(nr,payments))
-                print("Gas:",get_gas_value(nr,payments))
-                print("Water:",get_water_value(nr,payments))
-                print("Heat:",get_heat_value(nr,payments))
-                print("Sewage:",get_sewage_value(nr,payments))
-                print("Misc:",get_misc_value(nr,payments))
+                print("Apartment nr",nr,"has the following payments from date",service.get_date_value_str(nr,payments))
+                print("Gas:",service.get_gas_value(nr,payments))
+                print("Water:",service.get_water_value(nr,payments))
+                print("Heat:",service.get_heat_value(nr,payments))
+                print("Sewage:",service.get_sewage_value(nr,payments))
+                print("Misc:",service.get_misc_value(nr,payments))
         else:
                 print("No payments for the apartment nr:",nr)
 
@@ -24,18 +26,18 @@ def print_grt(payments,value):
         '''
         print("Apartments with payments more than:",value,"are:")
         for nr in payments:
-                gas=get_gas_value(nr,payments)
-                water=get_water_value(nr,payments)
-                heat=get_heat_value(nr,payments)
-                sewage=get_sewage_value(nr,payments)
-                misc=get_misc_value(nr,payments)
+                gas=service.get_gas_value(nr,payments)
+                water=service.get_water_value(nr,payments)
+                heat=service.get_heat_value(nr,payments)
+                sewage=service.get_sewage_value(nr,payments)
+                misc=service.get_misc_value(nr,payments)
                 if gas > value or water > value or heat > value or sewage > value or misc > value:
                        print("Apartment",nr)      
 
 def print_date_value(payments,date,value):
         print("Apartments with payments before",date)
         for nr in payments:
-                total=get_total_value(nr,payments)
+                total=service.get_total_value(nr,payments)
                 if total>value and payments[nr]['date']<date:
                         print("Apartment nr:",nr)
 
@@ -144,10 +146,29 @@ def input_payment(payments:dict,changes:list):
         sewage=read_float("Sewage:")
         misc=read_float("Misc:")
         date=read_date()
-        entry=payment_creator(gas,water,heat,sewage,misc,date)
+        entry=service.payment_creator(gas,water,heat,sewage,misc,date)
         try:
-                validate_entry(entry)
-                ADD(payments,nr,entry,changes)
+                service.validate_entry(entry)
+                service.add_payment(payments,nr,entry,changes)
         except ValueError as ve:
                 print(ve)
-        
+
+def del_app(payments:dict,changes:list):
+        nr=read_int("Enter apartment number:")
+        service.del_payment(payments,nr,changes)      
+
+def del_app_sf(payments:dict,changes:list):
+        start=read_int("Start:")
+        end=read_int("End:")
+        service.mass_del(payments,start,end,changes)
+
+def del_key_sf(payments:dict,changes:list):
+        key=key_selector()
+        start=min(payments)
+        end=max(payments)
+        service.mass_mod(payments,start,end,key,0.0,changes)
+
+def total_app(payments):
+        nr=read_int("Enter apartment number:")
+        print("Total for apartment:",nr,"is",service.get_total_value(nr,payments))
+ 
