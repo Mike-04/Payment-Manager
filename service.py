@@ -1,66 +1,75 @@
 import bussines
-
-def get_gas_value(nr,payments):
+def get_date_value(entry):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
         nr(int):number of apartment to retrive values from
         returns:value requested
         '''
-        if nr in payments:
-              return float(payments[nr]['gas'])
+        if entry:
+              return entry['date']
+
+def get_gas_value(entry):
+        '''
+        The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
+        payments(dict):dictionary of all payments
+        nr(int):number of apartment to retrive values from
+        returns:value requested
+        '''
+        if entry:
+              return float(entry['gas'])
                      
-def get_water_value(nr,payments):
+def get_water_value(entry):
         '''
         The get_gas_value function retrieves the water value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
         nr(int):number of apartment to retrive values from
         returns:value requested
         '''
-        if nr in payments:
-              return float(payments[nr]['water'])
+        if entry:
+              return float(entry['water'])
              
-def get_heat_value(nr,payments):
+def get_heat_value(entry):
         '''
         The get_gas_value function retrieves the heat value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
         nr(int):number of apartment to retrive values from
         returns:value requested
         '''
-        if nr in payments:
-              return float(payments[nr]['heat'])
+        if entry:
+              return float(entry['heat'])
                 
-def get_sewage_value(nr,payments):
+def get_sewage_value(entry):
         '''
         The get_gas_value function retrieves the sewage value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
         nr(int):number of apartment to retrive values from
         returns:value requested
         '''
-        if nr in payments:
-              return float(payments[nr]['sewage'])
+        if entry:
+              return float(entry['sewage'])
                 
-def get_misc_value(nr,payments):
+def get_misc_value(entry):
         '''
         The get_gas_value function retrieves the misc value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
         nr(int):number of apartment to retrive values from
         returns:value requested
         '''
-        if nr in payments:
-              return float(payments[nr]['misc'])
+        if entry:
+              return float(entry['misc'])
 
-def get_date_value_str(nr,payments):
+def get_date_value_str(entry):
         '''
         The get_gas_value function retrieves the date value as string for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
         nr(int):number of apartment to retrive values from
         returns:value requested
         '''
-        if nr in payments:
-                return payments[nr]['date'].strftime("%x")
+        if entry:
+                return entry['date'].strftime("%x")
                 
-def get_total_value(nr,payments):
+def get_total_value(entry):
         '''
         The get_gas_value function calculates the total for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
@@ -68,11 +77,11 @@ def get_total_value(nr,payments):
         returns: total
         '''
         total=0
-        total+=get_gas_value(nr,payments)
-        total+=get_water_value(nr,payments)
-        total+=get_heat_value(nr,payments)
-        total+=get_sewage_value(nr,payments)
-        total+=get_misc_value(nr,payments)
+        total+=get_gas_value(entry)
+        total+=get_water_value(entry)
+        total+=get_heat_value(entry)
+        total+=get_sewage_value(entry)
+        total+=get_misc_value(entry)
         return total
 
 def validate_entry(entry):
@@ -97,10 +106,41 @@ def mass_mod(payments,start,end,key,value,changes):
         changes(list):list where changes are recorded
         returns nothing
         '''
+        nrc=0
+        ok=0
         for nr in range(start,end+1):
                 if nr in payments:
-                        bussines.ADD(payments,nr,{key:value},changes)
-        changes.append({'op':'mMOD','nr':end-start+1,'init':'NaN','fin':'NaN'})
+                        gas=get_gas_value(payments[nr])
+                        water=get_water_value(payments[nr])
+                        heat=get_heat_value(payments[nr])
+                        sewage=get_sewage_value(payments[nr])
+                        misc=get_misc_value(payments[nr])
+                        date=get_date_value(payments[nr])
+                        if(key=='gas'):
+                                ok=1
+                                gas=value
+                        if(key=='water'):
+                                ok=1
+                                water=value
+                        if(key=='heat'):
+                                ok=1
+                                heat=value
+                        if(key=='sewage'):
+                                ok=1
+                                sewage=value
+                        if(key=='misc'):
+                                ok=1
+                                misc=value
+                        if ok==1:
+                                entry=payment_creator(gas,water,heat,sewage,misc,date)
+                                bussines.ADD(payments,nr,entry,changes)
+                                nrc+=1
+        # nrc=0
+        # for nr in range(start,end+1):
+        #         if nr in payments:
+        #                 bussines.ADD(payments,nr,{key:value},changes)
+        #                 nrc+=1
+        changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})
 
 def del_under_value(payments,value,changes):
         '''
@@ -111,27 +151,33 @@ def del_under_value(payments,value,changes):
         changes(list):list where changes are recorded
         returns nothing
         '''
+        ok=0
         nrc=0
         for nr in payments:
-                gas=get_gas_value(nr,payments)
-                water=get_water_value(nr,payments)
-                heat=get_heat_value(nr,payments)
-                sewage=get_sewage_value(nr,payments)
-                misc=get_misc_value(nr,payments)
+                gas=get_gas_value(payments[nr])
+                water=get_water_value(payments[nr])
+                heat=get_heat_value(payments[nr])
+                sewage=get_sewage_value(payments[nr])
+                misc=get_misc_value(payments[nr])
+                date=get_date_value(payments[nr])
                 if(gas<value):
-                        bussines.ADD(payments,nr,{'gas':0.0},changes)
-                        nrc+=1
+                        ok=1
+                        gas=0.0
                 if(water<value):
-                        bussines.ADD(payments,nr,{'water':0.0},changes)
-                        nrc+=1
+                        ok=1
+                        water=0.0
                 if(heat<value):
-                        bussines.ADD(payments,nr,{'heat':0.0},changes)
-                        nrc+=1
+                        ok=1
+                        heat=0.0
                 if(sewage<value):
-                        bussines.ADD(payments,nr,{'sewage':0.0},changes)
-                        nrc+=1
+                        ok=1
+                        sewage=0.0
                 if(misc<value):
-                        bussines.ADD(payments,nr,{'misc':0.0},changes)
+                        ok=1
+                        misc=0.0
+                if ok==1:
+                        entry=payment_creator(gas,water,heat,sewage,misc,date)
+                        bussines.ADD(payments,nr,entry,changes)
                         nrc+=1    
         changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})  
 
@@ -172,3 +218,4 @@ def del_payment(payments,nr,changes):
   
 def undo_service(payments,changes):
         bussines.UNDO(payments,changes)
+
