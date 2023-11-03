@@ -38,7 +38,7 @@ def print_date_value(payments,date,value):
         print("Apartments with payments before",date)
         for nr in payments:
                 total=service.get_total_value(nr,payments)
-                if total>value and payments[nr]['date']<date:
+                if total>value and service.get_date_value(nr,payments)<date:
                         print("Apartment nr:",nr)
 
 def print_all_key(payments,key):
@@ -78,15 +78,15 @@ def key_selector():
         val=read_int("Value:")
         match val:
                 case 1:
-                      return 'gas'
+                      return 0
                 case 2:
-                      return 'water'
+                      return 1
                 case 3:
-                      return 'heat'
+                      return 2
                 case 4:
-                      return 'sewage'
+                      return 3
                 case 5:
-                      return 'misc'
+                      return 4
 
 def read_float(msg:str):
         '''
@@ -172,3 +172,45 @@ def total_app(payments):
         nr=read_int("Enter apartment number:")
         print("Total for apartment:",nr,"is",service.get_total_value(nr,payments))
  
+def print_without_key(payments,key):
+        for nr in payments:
+                gas=service.get_gas_value(nr,payments)
+                water=service.get_water_value(nr,payments)
+                heat=service.get_heat_value(nr,payments)
+                sewage=service.get_sewage_value(nr,payments)
+                misc=service.get_misc_value(nr,payments)
+                date=service.get_date_value_str(nr,payments)
+                rez="Aparment number "+str(nr)
+                if(key!=0):
+                        rez+=" gas:"+str(gas)
+                if(key!=1):
+                        rez+=" water:"+str(water)
+                if(key!=2):
+                        rez+=" heat:"+str(heat)
+                if(key!=3):
+                        rez+=" sewage:"+str(sewage)
+                if(key!=4):
+                        rez+=" mis:"+str(misc)
+                print(rez)
+
+def print_under_value(payments,value):
+        for nr in payments:
+                gas=service.get_gas_value(nr,payments)
+                water=service.get_water_value(nr,payments)
+                heat=service.get_heat_value(nr,payments)
+                sewage=service.get_sewage_value(nr,payments)
+                misc=service.get_misc_value(nr,payments)
+                date=service.get_date_value_str(nr,payments)
+                rez="Aparment number "+str(nr)
+                if(value>gas):
+                        rez+=" gas:"+str(gas)
+                if(value>water):
+                        rez+=" water:"+str(water)
+                if(value>heat):
+                        rez+=" heat:"+str(heat)
+                if(value>sewage):
+                        rez+=" sewage:"+str(sewage)
+                if(value>misc):
+                        rez+=" misc:"+str(misc)
+                if rez!="Aparment number "+str(nr):
+                        print(rez)

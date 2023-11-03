@@ -36,7 +36,7 @@ def run():
                                         sub_req=UI.read_int("Make selection:")
                                         match sub_req:
                                                 case 1:
-                                                        UI.del_app
+                                                        UI.del_app(payments,changes)
                                                 case 2:
                                                         start=UI.read_int("Start:")
                                                         end=UI.read_int("End:")
@@ -97,19 +97,18 @@ def run():
                         case 5:
                                 while(True):
                                         print("Choices:")
-                                        print("1: Delete all payments for a certain utility")
-                                        print("2: Delete all payments under a certain value")
+                                        print("1: Eliminates all payments for a certain utility")
+                                        print("2: Eliminates all payments under a certain value")
                                         print("3: Exit")
                                         sub_req=UI.read_int("Make selection:")
                                         match sub_req:
                                                 case 1:
                                                         key=UI.key_selector()
-                                                        start=min(payments)
-                                                        end=max(payments)
-                                                        service.mass_mod(payments,start,end,key,0.0,changes)
+                                                        UI.print_without_key(payments,key)
                                                 case 2:
+
                                                         val=UI.read_float("Input value:")
-                                                        service.del_under_value(payments,val,changes)
+                                                        UI.print_under_value(payments,val)
                                                 case 3:
                                                         break
                                                 case _:
@@ -133,7 +132,8 @@ def run():
                                         match sub_req:
                                                 case 1:
                                                         nr=random.randint(1,20)
-                                                        bussines.ADD(payments,nr,{'gas': float(random.randint(1,20)),'water':float(random.randint(1,20)),'heat':float(random.randint(1,20)),'sewage':float(random.randint(1,20)),'misc':float(random.randint(1,20)),'date':datetime.date.today()},changes)
+                                                        entry=service.payment_creator(float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),datetime.date.today())
+                                                        bussines.ADD(payments,nr,entry,changes)
                                                         pprint.pprint(payments[nr])
                                                 case 2:
                                                         nr=UI.read_int("Apartment number:")

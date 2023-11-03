@@ -23,7 +23,7 @@ def inADD(payments:dict,nr:int,val:dict):
         if nr not in payments:
                 payments[nr]=val
         else:
-                payments[nr].update(val)
+                payments[nr]=val
 
 def UNDO(payments:dict,changes:list):
         '''
@@ -64,7 +64,7 @@ def ADD(payments:dict,nr:int,val:dict,changes:list):
         changes(list):list where changes are recorded
         returns nothing
         '''
-        template={'gas':0,'water':0,'heat':0,'sewage':0,'misc':0,'date':'NaN'}
+        template=[0,0,0,0,0,'NaN']
         op='MOD'
         if nr not in payments:
                 payments[nr]=val
@@ -73,7 +73,7 @@ def ADD(payments:dict,nr:int,val:dict,changes:list):
         else:
                 init=payments[nr].copy()
                 changes.append({'op':op,'nr':nr,'init':init,'fin':val}) 
-                payments[nr].update(val)
+                payments[nr]=val
 
 def DEL(payments:dict,nr:int,changes:list):
         '''

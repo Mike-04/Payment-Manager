@@ -3,7 +3,7 @@ import datetime
 import service
 import bussines
 def auto_testing():
-        keys=['gas','water','heat','sewage','misc']
+        keys=[0,1,2,3,4]
         sb_changes=[]
         sb_payments={}
         for tests in range(1,100):
@@ -15,7 +15,7 @@ def auto_testing():
                         sewage=float(random.randint(0,100))
                         misc=float(random.randint(0,100))
                         date=datetime.date.today()
-                        test={'gas': gas,'water':water,'heat':heat,'sewage':sewage,'misc':misc,'date':date}
+                        test=service.payment_creator(gas,water,heat,sewage,misc,date)
                         bussines.ADD(sb_payments,nr,test,sb_changes)
                         assert(sb_payments[nr]==test)
                 sb_payments_c=sb_payments
