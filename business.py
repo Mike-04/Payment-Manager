@@ -47,9 +47,9 @@ def UNDO(payments:dict,changes:list):
                         case 'ADD':
                                 inDEL(payments,nr)
                         case 'mDEL':
-                                service.mass_undo(payments,changes,nr)
+                                service.mass_undo(nr)
                         case 'mMOD':
-                                service.mass_undo(payments,changes,nr)
+                                service.mass_undo(nr)
                 
         else:
                print("Nothing to undo")

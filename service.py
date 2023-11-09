@@ -1,4 +1,23 @@
 import business
+import testing
+payments={}
+changes=[]
+
+def clear(KEY):
+        if testing.check_key(KEY):
+                payments.clear()
+                changes.clear()
+        else:
+                print("Invalid key!")
+
+def retrieve_payments():
+        c_payments=payments
+        return c_payments
+
+def retrieve_changes():
+        c_changes=changes
+        return c_changes      
+
 def get_date_value(entry):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
@@ -95,7 +114,7 @@ def payment_creator(gas,water,heat,sewage,misc,date):
         return entry
 
 
-def mass_mod(payments,start,end,key,value,changes):
+def mass_mod(start,end,key,value):
         '''
         The mass_MOD function iteratively modifies payment information within a specified range and records a 'mMOD' operation in the changes list to indicate the mass modification.
         args:
@@ -137,7 +156,7 @@ def mass_mod(payments,start,end,key,value,changes):
                                 nrc+=1
         changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})
 
-def del_under_value(payments,value,changes):
+def del_under_value(value):
         '''
         The del_under_value function iteratively modifies payment information under a certain value and records a 'mMOD' operation in the changes list to indicate the mass modification.
         args:
@@ -176,7 +195,7 @@ def del_under_value(payments,value,changes):
                         nrc+=1    
         changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})  
 
-def mass_del(payments,start,end,changes):
+def mass_del(start,end):
         '''
         The `mass_DEL` function deletes payments between the indexes start and end records the type of operation.
         args:
@@ -194,7 +213,7 @@ def mass_del(payments,start,end,changes):
                         pass
         changes.append({'op':'mDEL','nr':chg,'init':'NaN','fin':'NaN'}) 
 
-def mass_undo(payments,changes,rec):
+def mass_undo(rec):
         '''
         The mass_UNDO function iteratively undoes changes in a payment dictionary based on a specified number of records (rec).
         payments(dict):dictionary of all payments
@@ -205,12 +224,12 @@ def mass_undo(payments,changes,rec):
         for i in range(0,rec):
               business.UNDO(payments,changes)
 
-def add_payment(payments,nr,entry,changes):
+def add_payment(nr,entry):
         business.ADD(payments,nr,entry,changes)
 
-def del_payment(payments,nr,changes):
+def del_payment(nr):
         business.DEL(payments,nr,changes)
   
-def undo_service(payments,changes):
+def undo_service():
         business.UNDO(payments,changes)
 
