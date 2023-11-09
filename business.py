@@ -17,7 +17,7 @@ def inADD(payments:dict,nr:int,val:dict):
         args:
         payments(dict):dictionary of all payments
         nr(int):number of apartment that has to be modified
-        val(dict):value to be intorduced or modified
+        val(dict):value to be introduced or modified
         returns nothing
         '''
         if nr not in payments:
@@ -60,7 +60,7 @@ def ADD(payments:dict,nr:int,val:dict,changes:list):
         args:
         payments(dict):dictionary of all payments
         nr(int):number of apartment that has to be modified
-        val(dict):value to be intorduced or modified
+        val(dict):value to be introduced or modified
         changes(list):list where changes are recorded
         returns nothing
         '''

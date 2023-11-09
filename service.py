@@ -1,9 +1,9 @@
-import bussines
+import business
 def get_date_value(entry):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -13,7 +13,7 @@ def get_gas_value(entry):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -23,7 +23,7 @@ def get_water_value(entry):
         '''
         The get_gas_value function retrieves the water value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -33,7 +33,7 @@ def get_heat_value(entry):
         '''
         The get_gas_value function retrieves the heat value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -43,7 +43,7 @@ def get_sewage_value(entry):
         '''
         The get_gas_value function retrieves the sewage value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -53,7 +53,7 @@ def get_misc_value(entry):
         '''
         The get_gas_value function retrieves the misc value for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -63,7 +63,7 @@ def get_date_value_str(entry):
         '''
         The get_gas_value function retrieves the date value as string for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns:value requested
         '''
         if entry:
@@ -73,7 +73,7 @@ def get_total_value(entry):
         '''
         The get_gas_value function calculates the total for a specific payment record number from the payments dictionary.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns: total
         '''
         total=0
@@ -100,7 +100,7 @@ def mass_mod(payments,start,end,key,value,changes):
         The mass_MOD function iteratively modifies payment information within a specified range and records a 'mMOD' operation in the changes list to indicate the mass modification.
         args:
         payments(dict):dictionary of all payments
-        start,end(int):indexes where apartments are to be modiffied
+        start,end(int):indexes where apartments are to be modified
         key:key to be modified 
         value:new value of the key to be modified 
         changes(list):list where changes are recorded
@@ -133,13 +133,8 @@ def mass_mod(payments,start,end,key,value,changes):
                                 misc=value
                         if ok==1:
                                 entry=payment_creator(gas,water,heat,sewage,misc,date)
-                                bussines.ADD(payments,nr,entry,changes)
+                                business.ADD(payments,nr,entry,changes)
                                 nrc+=1
-        # nrc=0
-        # for nr in range(start,end+1):
-        #         if nr in payments:
-        #                 bussines.ADD(payments,nr,{key:value},changes)
-        #                 nrc+=1
         changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})
 
 def del_under_value(payments,value,changes):
@@ -177,7 +172,7 @@ def del_under_value(payments,value,changes):
                         misc=0.0
                 if ok==1:
                         entry=payment_creator(gas,water,heat,sewage,misc,date)
-                        bussines.ADD(payments,nr,entry,changes)
+                        business.ADD(payments,nr,entry,changes)
                         nrc+=1    
         changes.append({'op':'mMOD','nr':nrc,'init':'NaN','fin':'NaN'})  
 
@@ -193,7 +188,7 @@ def mass_del(payments,start,end,changes):
         chg=0
         for nr in range (start, end+1):
                 try:
-                        bussines.DEL(payments,nr,changes)
+                        business.DEL(payments,nr,changes)
                         chg+=1
                 except:
                         pass
@@ -203,19 +198,19 @@ def mass_undo(payments,changes,rec):
         '''
         The mass_UNDO function iteratively undoes changes in a payment dictionary based on a specified number of records (rec).
         payments(dict):dictionary of all payments
-        rec(int):number of undos to be made
+        rec(int):number of undo operations to be made
         changes(list):list where changes are recorded
         returns nothing
         '''
         for i in range(0,rec):
-              bussines.UNDO(payments,changes)
+              business.UNDO(payments,changes)
 
 def add_payment(payments,nr,entry,changes):
-        bussines.ADD(payments,nr,entry,changes)
+        business.ADD(payments,nr,entry,changes)
 
 def del_payment(payments,nr,changes):
-        bussines.DEL(payments,nr,changes)
+        business.DEL(payments,nr,changes)
   
 def undo_service(payments,changes):
-        bussines.UNDO(payments,changes)
+        business.UNDO(payments,changes)
 

@@ -6,19 +6,18 @@ import datetime
 import service
 import UI
 import testing
-#importing bussines only for dev options
-import bussines
+#importing business only for dev options
+import business
 
 def run():
         changes=[]
         payments={}
         while(True):
-                #pprint.pprint(changes)
                 print("Choices:")
                 print("1: Add/Modify")
                 print("2: Delete")
                 print("3: Search")
-                print("4: Raports")
+                print("4: Reports")
                 print("5: Filters")
                 print("6: Undo")
                 print("7: Exit")
@@ -53,9 +52,9 @@ def run():
                         case 3:
                                 while(True):
                                         print("Choices:")
-                                        print("1: Shows all apartments with utilities over a inputed value")
-                                        print("2: Shows a certain uitilty for all apartaments")
-                                        print("3: Shows all utilies paid before a inputed date and over a inputed value")
+                                        print("1: Shows all apartments with utilities over a inputted value")
+                                        print("2: Shows a certain utility for all apartments")
+                                        print("3: Shows all utilities paid before a inputted date and over a imputed value")
                                         print("4: Exit")
                                         sub_req=UI.read_int("Make selection:")
                                         match sub_req:
@@ -76,8 +75,8 @@ def run():
                         case 4:
                                 while(True):
                                         print("Choices:")
-                                        print("1: Shows all apartments with utilities over a inputed value")
-                                        print("2: Shows a certain uitilty for all apartaments")
+                                        print("1: Shows all apartments with utilities over a inputted value")
+                                        print("2: Shows a certain utility for all apartments")
                                         print("3: Calculates total payments for an apartment")
                                         print("4: Exit")
                                         sub_req=UI.read_int("Make selection:")
@@ -132,11 +131,11 @@ def run():
                                         match sub_req:
                                                 case 1:
                                                         nr=random.randint(1,20)
-                                                        bussines.ADD(payments,nr,{'gas': float(random.randint(1,20)),'water':float(random.randint(1,20)),'heat':float(random.randint(1,20)),'sewage':float(random.randint(1,20)),'misc':float(random.randint(1,20)),'date':datetime.date.today()},changes)
+                                                        business.ADD(payments,nr,{'gas': float(random.randint(1,20)),'water':float(random.randint(1,20)),'heat':float(random.randint(1,20)),'sewage':float(random.randint(1,20)),'misc':float(random.randint(1,20)),'date':datetime.date.today()},changes)
                                                         pprint.pprint(payments[nr])
                                                 case 2:
                                                         nr=UI.read_int("Apartment number:")
-                                                        bussines.DEL(payments,nr,changes)
+                                                        business.DEL(payments,nr,changes)
                                                 case 3:
                                                         start=min(payments)
                                                         end=max(payments)
