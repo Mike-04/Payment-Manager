@@ -181,7 +181,7 @@ def del_app():
 
 def del_app_sf():
         '''
-        del_app function passes the command to delete a apartments in range to services
+        del_app_sf function passes the command to delete a apartments in range to services
         args:none
         returns nothing
         '''
@@ -191,7 +191,7 @@ def del_app_sf():
 
 def del_key_sf():
         '''
-        del_app function passes the command to delete a payment type from all apartments to services
+        del_key_sf function passes the command to delete a payment type from all apartments to services
         args:none
         returns nothing
         '''
@@ -241,7 +241,7 @@ def print_without_key(key):
 def print_over_value(value):
         '''
         print_over_value function prints all the payment types from all the apartments over a certain value 
-        key:payment type to be removed 
+        value: value for comparison 
         returns nothing
         '''
         payments=service.retrieve_payments()

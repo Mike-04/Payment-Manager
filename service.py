@@ -27,7 +27,7 @@ def retrieve_payments():
 
 def retrieve_changes():
         '''
-        retrieve_payments function returns a copy history
+        retrieve_payments function returns a history
         args: none
         returns: c_payments:list (a copy of the history list)
         '''
@@ -242,7 +242,7 @@ def mass_undo(rec):
 
 def add_payment(nr,entry):
         '''
-        add_payment function send an apartment entity and a number to be added into the payments or modified
+        add_payment function sends an apartment entity and a number to be added into the payments or modified
         nr: number where the apartment should be added or modifies
         entry: apartment entity
         returns nothing
@@ -251,7 +251,7 @@ def add_payment(nr,entry):
 
 def del_payment(nr):
         '''
-        del_payment function send an apartment number to be deleted from payments or excepts index error if number is not existent
+        del_payment function sends an apartment number to be deleted from payments or excepts index error if number is not existent
         nr: number of the apartment that should be deleted
         returns nothing
         '''
