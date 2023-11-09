@@ -5,6 +5,11 @@ payments={}
 changes=[]
 
 def clear(KEY):
+        '''
+        clear function removes every apartment and every changes in history
+        KEY: generated verification key for safety purposes
+        returns:nothing
+        '''
         if testing.check_key(KEY):
                 payments.clear()
                 changes.clear()
@@ -12,18 +17,27 @@ def clear(KEY):
                 print("Invalid key!")
 
 def retrieve_payments():
+        '''
+        retrieve_payments function returns a copy of all the payments
+        args: none
+        returns: c_payments:dict (a copy of the payment dictionary)
+        '''
         c_payments=payments.copy()
         return c_payments
 
 def retrieve_changes():
+        '''
+        retrieve_payments function returns a copy history
+        args: none
+        returns: c_payments:list (a copy of the history list)
+        '''
         c_changes=changes.copy()
         return c_changes      
 
 def get_date_value(entry):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -32,8 +46,7 @@ def get_date_value(entry):
 def get_gas_value(entry):
         '''
         The get_gas_value function retrieves the gas value for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -42,8 +55,7 @@ def get_gas_value(entry):
 def get_water_value(entry):
         '''
         The get_gas_value function retrieves the water value for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -52,8 +64,7 @@ def get_water_value(entry):
 def get_heat_value(entry):
         '''
         The get_gas_value function retrieves the heat value for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -62,8 +73,7 @@ def get_heat_value(entry):
 def get_sewage_value(entry):
         '''
         The get_gas_value function retrieves the sewage value for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -72,8 +82,7 @@ def get_sewage_value(entry):
 def get_misc_value(entry):
         '''
         The get_gas_value function retrieves the misc value for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -82,8 +91,7 @@ def get_misc_value(entry):
 def get_date_value_str(entry):
         '''
         The get_gas_value function retrieves the date value as string for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns:value requested
         '''
         if entry:
@@ -92,8 +100,7 @@ def get_date_value_str(entry):
 def get_total_value(entry):
         '''
         The get_gas_value function calculates the total for a specific payment record number from the payments dictionary.
-        payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrieve values from
+        entry:dict an apartment entity
         returns: total
         '''
         total=0
@@ -105,12 +112,28 @@ def get_total_value(entry):
         return total
 
 def validate_entry(entry):
+        '''
+        validate_entry function checks for unacceptable value inputted by the user
+        entry:dict an apartment entity
+        returns: nothing
+        raises error if wrong input
+        '''
         if entry['gas']<0 or entry['water']<0 or entry['heat']<0 or entry['sewage']<0 or entry['misc']<0:
                 raise ValueError("Value can't be smaller than 0")
 
 
 
 def payment_creator(gas,water,heat,sewage,misc,date):
+        '''
+        payment_creator function generates an apartment entity
+        gas:gas value
+        water:water value
+        heat:heat value
+        sewage:sewage value
+        misc:misc value
+        date:date value
+        returns: apartment entity
+        '''
         entry={'gas': gas,'water':water,'heat':heat,'sewage':sewage,'misc':misc,'date':date}
         return entry
 
@@ -119,11 +142,9 @@ def mass_mod(start,end,key,value):
         '''
         The mass_MOD function iteratively modifies payment information within a specified range and records a 'mMOD' operation in the changes list to indicate the mass modification.
         args:
-        payments(dict):dictionary of all payments
         start,end(int):indexes where apartments are to be modified
         key:key to be modified 
         value:new value of the key to be modified 
-        changes(list):list where changes are recorded
         returns nothing
         '''
         nrc=0
@@ -161,9 +182,7 @@ def del_under_value(value):
         '''
         The del_under_value function iteratively modifies payment information under a certain value and records a 'mMOD' operation in the changes list to indicate the mass modification.
         args:
-        payments(dict):dictionary of all payments
         value: value for comparison
-        changes(list):list where changes are recorded
         returns nothing
         '''
         ok=0
@@ -200,9 +219,7 @@ def mass_del(start,end):
         '''
         The `mass_DEL` function deletes payments between the indexes start and end records the type of operation.
         args:
-        payments(dict):dictionary of all payments
         start,end(int):indexes where apartments are to be deleted
-        changes(list):list where changes are recorded
         returns nothing
         '''
         chg=0
@@ -217,18 +234,27 @@ def mass_del(start,end):
 def mass_undo(rec):
         '''
         The mass_UNDO function iteratively undoes changes in a payment dictionary based on a specified number of records (rec).
-        payments(dict):dictionary of all payments
         rec(int):number of undo operations to be made
-        changes(list):list where changes are recorded
         returns nothing
         '''
         for i in range(0,rec):
               business.UNDO(payments,changes)
 
 def add_payment(nr,entry):
+        '''
+        add_payment function send an apartment entity and a number to be added into the payments or modified
+        nr: number where the apartment should be added or modifies
+        entry: apartment entity
+        returns nothing
+        '''
         business.ADD(payments,nr,entry,changes)
 
 def del_payment(nr):
+        '''
+        del_payment function send an apartment number to be deleted from payments or excepts index error if number is not existent
+        nr: number of the apartment that should be deleted
+        returns nothing
+        '''
         try:
                 business.DEL(payments,nr,changes)
         except IndexError as error:
@@ -237,5 +263,10 @@ def del_payment(nr):
 
   
 def undo_service():
+        '''
+        undo_service function requires an undo of the last operation made
+        args: none
+        returns nothing
+        '''
         business.UNDO(payments,changes)
 

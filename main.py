@@ -44,9 +44,10 @@ def run():
                                                 case 3:
                                                         payments=service.retrieve_payments()
                                                         key=UI.key_selector()
-                                                        start=min(payments)
-                                                        end=max(payments)
-                                                        service.mass_mod(start,end,key,0.0)
+                                                        if payments:
+                                                                start=min(payments)
+                                                                end=max(payments)
+                                                                service.mass_mod(start,end,key,0.0)
                                                 case 4:
                                                         break
                                                 case _:

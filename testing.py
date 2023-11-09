@@ -5,11 +5,21 @@ import service
 KEY=random.randint(1000,9999)
 
 def check_key(sKEY):
+        '''
+        check_key function compares the sent KEY to the security key
+        sKEY: sent security key
+        returns: 1 if the keys match, 0 if they dont 
+        '''
         if sKEY!=KEY:
                 return 0
         return 1
 
 def auto_testing():
+        '''
+        auto_testing function is a magical function that makes sure everything works
+        args:none
+        returns assertionError if you wrote spaghetti code
+        '''
         keys=['gas','water','heat','sewage','misc']
         for tests in range(1,100):
                 for it in range(1,100):

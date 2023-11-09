@@ -3,13 +3,17 @@ import datetime
 import msvcrt
 
 def pak():
+        '''
+        pak function asks the user to press a key in order to proceed
+        args: none
+        returns nothing
+        '''
         print("Press any key to continue...")
         msvcrt.getch()
 
 def print_ap(nr):
         '''
         print_ap function prints all the payments from an apartment.
-        payments(dict):dictionary of all payments
         nr(int):number of apartment to retrieve values from
         returns nothing
         '''
@@ -27,7 +31,6 @@ def print_ap(nr):
 def print_grt(value):
         '''
         print_grt function prints all the apartments with payments greater than a value.
-        payments(dict):dictionary of all payments
         value(float):value for comparison
         returns nothing
         '''
@@ -43,6 +46,12 @@ def print_grt(value):
                        print("Apartment",nr)      
 
 def print_date_value(date,value):
+        '''
+        print_date_value function prints all the apartments with payments before a certain date and with total over a certain value.
+        value(float):value for comparison
+        date(date):date for comparison
+        returns nothing
+        '''
         payments=service.retrieve_payments()
         print("Apartments with payments before",date)
         for nr in payments:
@@ -53,7 +62,6 @@ def print_date_value(date,value):
 def print_all_key(key):
         '''
         print_all_key function displays payment information for a specific key (e.g., 'gas', 'water', 'heat') from all apartments.
-        payments (dict): A dictionary containing payment information for multiple apartments.
         key (str): The payment category to be displayed (e.g., 'gas', 'water', 'heat').
         returns nothing
         '''
@@ -64,7 +72,6 @@ def print_all_key(key):
 def total_by_key(key):
         '''
         total_by_key function displays total sum for a specific key (e.g., 'gas', 'water', 'heat') for all apartments.
-        payments (dict): A dictionary containing payment information for multiple apartments.
         key (str): The payment category to be displayed (e.g., 'gas', 'water', 'heat').
         returns nothing
         '''
@@ -86,7 +93,7 @@ def key_selector():
         print("Heat:3")
         print("Sewage:4")
         print("Miscellaneous:5")
-        val=read_int("Value:")
+        val=read_int("\nValue:")
         match val:
                 case 1:
                       return 'gas'
@@ -98,6 +105,7 @@ def key_selector():
                       return 'sewage'
                 case 5:
                       return 'misc'
+        pak()
 
 def read_float(msg:str):
         '''
@@ -146,8 +154,6 @@ def read_date():
 def input_payment():
         '''
         input_payment function allows the user to input payment information and updates the 'payments' dictionary.
-        payments(dict):dictionary of all payments
-        changes(list):list where changes are recorded
         returns nothing
         '''
         nr=read_int("Nr:")
@@ -165,15 +171,30 @@ def input_payment():
                 print(ve)
 
 def del_app():
+        '''
+        del_app function passes the command to delete a certain apartment to services
+        args:none
+        returns nothing
+        '''
         nr=read_int("Enter apartment number:")
         service.del_payment(nr)      
 
 def del_app_sf():
+        '''
+        del_app function passes the command to delete a apartments in range to services
+        args:none
+        returns nothing
+        '''
         start=read_int("Start:")
         end=read_int("End:")
         service.mass_del(start,end)
 
 def del_key_sf():
+        '''
+        del_app function passes the command to delete a payment type from all apartments to services
+        args:none
+        returns nothing
+        '''
         payments=service.retrieve_payments()
         key=key_selector()
         start=min(payments)
@@ -181,11 +202,21 @@ def del_key_sf():
         service.mass_mod(start,end,key,0.0)
 
 def total_app():
+        '''
+        total_app function prints the total for a certain apartment
+        args:none
+        returns nothing
+        '''
         payments=service.retrieve_payments()
         nr=read_int("Enter apartment number:")
         print("Total for apartment:",nr,"is",service.get_total_value(payments[nr]))
 
 def print_without_key(key):
+        '''
+        print_without_key function prints all the apartments without one payment type
+        key:payment type to be removed 
+        returns nothing
+        '''
         keys=['gas','water','heat','sewage','misc']
         payments=service.retrieve_payments()
         for nr in payments:
@@ -208,6 +239,11 @@ def print_without_key(key):
                 print(rez)
 
 def print_over_value(value):
+        '''
+        print_over_value function prints all the payment types from all the apartments over a certain value 
+        key:payment type to be removed 
+        returns nothing
+        '''
         payments=service.retrieve_payments()
         for nr in payments:
                 gas=service.get_gas_value(payments[nr])

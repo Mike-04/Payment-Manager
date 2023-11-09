@@ -3,7 +3,6 @@ import service
 def inDEL(payments:dict,nr:int):
         '''
         The `inDEL` function deletes a payment dictionary.
-        args:
         payments(dict):dictionary of all payments
         nr(int):number of apartment that has to be modified
         returns nothing
@@ -14,7 +13,6 @@ def inDEL(payments:dict,nr:int):
 def inADD(payments:dict,nr:int,val:dict):
         '''
         The `inADD` function updates a payment dictionary.
-        args:
         payments(dict):dictionary of all payments
         nr(int):number of apartment that has to be modified
         val(dict):value to be introduced or modified
@@ -28,7 +26,6 @@ def inADD(payments:dict,nr:int,val:dict):
 def UNDO(payments:dict,changes:list):
         '''
         The UNDO function reverses the most recent payment operation recorded in the changes list and updates the payments dictionary accordingly
-        args:
         payments(dict):dictionary of all payments
         changes(list):list where changes are recorded
         returns nothing
@@ -57,7 +54,6 @@ def UNDO(payments:dict,changes:list):
 def ADD(payments:dict,nr:int,val:dict,changes:list):
         '''
         The `ADD` function updates a payment dictionary and records the type of operation ('MOD' or 'ADD').
-        args:
         payments(dict):dictionary of all payments
         nr(int):number of apartment that has to be modified
         val(dict):value to be introduced or modified
