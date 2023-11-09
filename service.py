@@ -1,5 +1,6 @@
 import business
 import testing
+
 payments={}
 changes=[]
 
@@ -11,11 +12,11 @@ def clear(KEY):
                 print("Invalid key!")
 
 def retrieve_payments():
-        c_payments=payments
+        c_payments=payments.copy()
         return c_payments
 
 def retrieve_changes():
-        c_changes=changes
+        c_changes=changes.copy()
         return c_changes      
 
 def get_date_value(entry):
@@ -228,7 +229,12 @@ def add_payment(nr,entry):
         business.ADD(payments,nr,entry,changes)
 
 def del_payment(nr):
-        business.DEL(payments,nr,changes)
+        try:
+                business.DEL(payments,nr,changes)
+        except IndexError as error:
+                print(error)
+                
+
   
 def undo_service():
         business.UNDO(payments,changes)

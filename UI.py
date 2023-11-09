@@ -1,5 +1,10 @@
 import service
 import datetime 
+import msvcrt
+
+def pak():
+        print("Press any key to continue...")
+        msvcrt.getch()
 
 def print_ap(nr):
         '''
@@ -75,7 +80,7 @@ def key_selector():
         args: none
         returns: selected key as a string based on the user's input.
         '''
-        print("select one of the following:")
+        print("Select one of the following:")
         print("Gas:1")
         print("Water:2")
         print("Heat:3")
@@ -181,6 +186,7 @@ def total_app():
         print("Total for apartment:",nr,"is",service.get_total_value(payments[nr]))
 
 def print_without_key(key):
+        keys=['gas','water','heat','sewage','misc']
         payments=service.retrieve_payments()
         for nr in payments:
                 gas=service.get_gas_value(payments[nr])
@@ -188,21 +194,20 @@ def print_without_key(key):
                 heat=service.get_heat_value(payments[nr])
                 sewage=service.get_sewage_value(payments[nr])
                 misc=service.get_misc_value(payments[nr])
-                date=service.get_date_value_str(payments[nr])
                 rez="Apartment number "+str(nr)
-                if(key!=0):
+                if(key!=keys[0]):
                         rez+=" gas:"+str(gas)
-                if(key!=1):
+                if(key!=keys[1]):
                         rez+=" water:"+str(water)
-                if(key!=2):
+                if(key!=keys[2]):
                         rez+=" heat:"+str(heat)
-                if(key!=3):
+                if(key!=keys[3]):
                         rez+=" sewage:"+str(sewage)
-                if(key!=4):
-                        rez+=" mis:"+str(misc)
+                if(key!=keys[4]):
+                        rez+=" misc:"+str(misc)
                 print(rez)
 
-def print_under_value(value):
+def print_over_value(value):
         payments=service.retrieve_payments()
         for nr in payments:
                 gas=service.get_gas_value(payments[nr])
@@ -210,17 +215,16 @@ def print_under_value(value):
                 heat=service.get_heat_value(payments[nr])
                 sewage=service.get_sewage_value(payments[nr])
                 misc=service.get_misc_value(payments[nr])
-                date=service.get_date_value_str(payments[nr])
                 rez="Apartment number "+str(nr)
-                if(value>gas):
+                if(value<gas):
                         rez+=" gas:"+str(gas)
-                if(value>water):
+                if(value<water):
                         rez+=" water:"+str(water)
-                if(value>heat):
+                if(value<heat):
                         rez+=" heat:"+str(heat)
-                if(value>sewage):
+                if(value<sewage):
                         rez+=" sewage:"+str(sewage)
-                if(value>misc):
+                if(value<misc):
                         rez+=" misc:"+str(misc)
                 if rez!="Apartment number "+str(nr):
                         print(rez)
