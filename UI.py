@@ -4,7 +4,7 @@ def print_ap(payments,nr):
         '''
         print_ap function prints all the payments from an apartment.
         payments(dict):dictionary of all payments
-        nr(int):number of apartment to retrive values from
+        nr(int):number of apartment to retrieve values from
         returns nothing
         '''
         if nr in payments:
@@ -114,7 +114,7 @@ def read_int(msg:str):
 
 def read_date():
         '''
-        read_date function prompts the user to input a date or autocompletes with todays date and handles any input errors.
+        read_date function prompts the user to input a date or autocomplete with todays date and handles any input errors.
         args:none
         returns:date entered by the user.
         '''
@@ -180,7 +180,7 @@ def print_without_key(payments,key):
                 sewage=service.get_sewage_value(payments[nr])
                 misc=service.get_misc_value(payments[nr])
                 date=service.get_date_value_str(payments[nr])
-                rez="Aparment number "+str(nr)
+                rez="Apartment number "+str(nr)
                 if(key!=0):
                         rez+=" gas:"+str(gas)
                 if(key!=1):
@@ -201,7 +201,7 @@ def print_under_value(payments,value):
                 sewage=service.get_sewage_value(payments[nr])
                 misc=service.get_misc_value(payments[nr])
                 date=service.get_date_value_str(payments[nr])
-                rez="Aparment number "+str(nr)
+                rez="Apartment number "+str(nr)
                 if(value>gas):
                         rez+=" gas:"+str(gas)
                 if(value>water):
@@ -212,5 +212,5 @@ def print_under_value(payments,value):
                         rez+=" sewage:"+str(sewage)
                 if(value>misc):
                         rez+=" misc:"+str(misc)
-                if rez!="Aparment number "+str(nr):
+                if rez!="Apartment number "+str(nr):
                         print(rez)
