@@ -151,19 +151,26 @@ def read_date():
                         break
         return dt
 
-def input_payment():
+def get_date_fs(str):
+        dt=str.split('/')
+        try:
+                dt=datetime.date(int(dt[2]),int(dt[1]),int(dt[0]))
+        except:
+                dt=datetime.date.today()
+
+def input_payment(nr,gas,water,heat,sewage,misc,date):
         '''
         input_payment function allows the user to input payment information and updates the 'payments' dictionary.
         returns nothing
         '''
-        nr=read_int("Nr:")
-        gas=read_float("Gas:")
-        water=read_float("Water:")
-        heat=read_float("Heat:")
-        sewage=read_float("Sewage:")
-        misc=read_float("Misc:")
-        date=read_date()
-        entry=service.payment_creator(gas,water,heat,sewage,misc,date)
+        nr=int(nr)
+        gas=float(gas)
+        water=float(water)
+        heat=float(heat)
+        sewage=float(sewage)
+        misc=float(misc)
+        dt=get_date_fs(date)
+        entry=service.payment_creator(gas,water,heat,sewage,misc,dt)
         try:
                 service.validate_entry(entry)
                 service.add_payment(nr,entry)

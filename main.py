@@ -7,173 +7,114 @@ import UI
 import testing
 import os
 
-def run():
-
+def read_com():
         while(True):
-                os.system('cls')
-                print("Choices:")
-                print("1: Add/Modify")
-                print("2: Delete")
-                print("3: Search")
-                print("4: Reports")
-                print("5: Filters")
-                print("6: Undo")
-                print("7: Exit")
-                req=UI.read_int("Make selection:")
-                os.system('cls')
-                match req:
-                        case 1:
-                                UI.input_payment()
-                        case 2:
-                                while(True):
-                                        os.system('cls')
-                                        print("Choices:")
-                                        print("1: Delete entries for an apartment")
-                                        print("2: Delete entries in range")
-                                        print("3: Delete all payments for a certain utility")
-                                        print("4: Exit")
-                                        sub_req=UI.read_int("Make selection:")
-                                        os.system('cls')
-                                        match sub_req:
-                                                case 1:
-                                                        UI.del_app()
+                input_string=input(">>>")
+                commands=input_string.split(";") 
+                for comms in commands:
+                        comms=comms.strip()
+                        elem=comms.split()
+                        comm=elem[0]
+                        args=elem[1:]
+                        args.append("")
+                        #print(args)
+                        match comm:
+                                case "add":
+                                        try:
+                                                UI.input_payment(args[0],args[1],args[2],args[3],args[4],args[5],args[6])
+                                        except:
+                                                print("Invalid command!")
+                                case "del":
+                                        match len(args):
                                                 case 2:
-                                                        start=UI.read_int("Start:")
-                                                        end=UI.read_int("End:")
-                                                        service.mass_del(start,end)
+                                                        try:
+                                                                service.del_payment(int(args[0]))
+                                                        except:
+                                                                print("Invalid command!")
                                                 case 3:
-                                                        payments=service.retrieve_payments()
-                                                        key=UI.key_selector()
-                                                        if payments:
-                                                                start=min(payments)
-                                                                end=max(payments)
-                                                                service.mass_mod(start,end,key,0.0)
-                                                case 4:
-                                                        break
-                                                case _:
-                                                        print("Invalid input!")
-                        case 3:
-                                while(True):
-                                        os.system('cls')
-                                        print("Choices:")
-                                        print("1: Shows all apartments with utilities over a inputted value")
-                                        print("2: Shows a certain utility for all apartments")
-                                        print("3: Shows all utilities paid before a inputted date and over a inputted value")
-                                        print("4: Exit")
-                                        sub_req=UI.read_int("Make selection:")
-                                        os.system('cls')
-                                        match sub_req:
-                                                case 1:
-                                                        val=UI.read_float("Enter the value:")
-                                                        UI.print_grt(val)
-                                                case 2:
-                                                        key=UI.key_selector()
-                                                        UI.print_all_key(key)
-                                                case 3:
-                                                        dt=UI.read_date()
-                                                        val=UI.read_float("Input value:")
-                                                        UI.print_date_value(dt,val)
-                                                case 4:
-                                                        break
-                                                case _:
-                                                        print("Invalid input!")
-                                        UI.pak()
-                        case 4:
-                                while(True):
-                                        os.system('cls')
-                                        print("Choices:")
-                                        print("1: Shows all apartments with utilities over a inputted value")
-                                        print("2: Shows a certain utility for all apartments")
-                                        print("3: Calculates total payments for an apartment")
-                                        print("4: Exit")
-                                        sub_req=UI.read_int("Make selection:")
-                                        os.system('cls')
-                                        match sub_req:
-                                                case 1:
-                                                        val=UI.read_float("Enter the value:")
-                                                        UI.print_grt(val)
-                                                case 2:
-                                                        key=UI.key_selector()
-                                                        UI.print_all_key(key)
-                                                case 3:
-                                                        UI.total_app()
-                                                case 4:
-                                                        break
-                                                case _:
-                                                        print("Invalid input!")
-                                        UI.pak()
-                        case 5:
-                                while(True):
-                                        os.system('cls')
-                                        print("Choices:")
-                                        print("1: Eliminates all payments for a certain utility")
-                                        print("2: Eliminates all payments under a certain value")
-                                        print("3: Exit")
-                                        sub_req=UI.read_int("Make selection:")
-                                        os.system('cls')
-                                        match sub_req:
-                                                case 1:
-                                                        key=UI.key_selector()
-                                                        UI.print_without_key(key)
-                                                case 2:
-                                                        val=UI.read_float("Input value:")
-                                                        UI.print_over_value(val)
-                                                case 3:
-                                                        break
-                                                case _:
-                                                        print("Invalid input!")
-                                        UI.pak()
-                        case 6:
-                                service.undo_service()
-                        case 7:
-                                break
-                        case 86:
-                                while(True):
-                                        os.system('cls')
+                                                        try:
+                                                                service.mass_del(int(args[0]),int(args[1]))
+                                                        except:
+                                                                print("Invalid command!")
+                                case "undo":
+                                        service.undo_service()
+                                case "pprint":
+                                        match args[0]:
+                                                case "p":
+                                                        cpayments=service.retrieve_payments()
+                                                        pprint.pprint(cpayments)
+                                                case "h":
+                                                        chistory=service.retrieve_changes()
+                                                        pprint.pprint(chistory)
+                                case "delk":
                                         payments=service.retrieve_payments()
-                                        changes=service.retrieve_changes()
-                                        print("DEV MODE-Activated :)")
-                                        print("Choices:")
-                                        print("1: Add a random apartment to the list")
-                                        print("2: Delete an apartment")
-                                        print("3: Delete all apartments")
-                                        print("4: Undo")
-                                        print("5: PPrint all apartments")
-                                        print("6: PPrint all changes")
-                                        print("7: Clear all")
-                                        print("8: Exit")
-                                        sub_req=UI.read_int("Make selection:")
-                                        os.system('cls')
-                                        match sub_req:
-                                                case 1:
-                                                        nr=random.randint(1,20)
-                                                        entry=service.payment_creator(float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),datetime.date.today())
-                                                        service.add_payment(nr,entry)
-                                                        payments=service.retrieve_payments()
-                                                        pprint.pprint(payments[nr])
-                                                case 2:
-                                                        nr=UI.read_int("Apartment number:")
-                                                        service.del_payment(nr)
-                                                case 3:
-                                                        start=min(payments)
-                                                        end=max(payments)
-                                                        service.mass_del(start,end)
-                                                case 4:
-                                                        service.undo_service()
-                                                case 5:
-                                                        pprint.pprint(payments)
-                                                case 6:
-                                                        pprint.pprint(changes)
-                                                case 7:
-                                                        service.clear(testing.KEY)
-                                                case 8:
-                                                        print("DEV MODE-Deactivated :)")
-                                                        break
+                                        if payments:
+                                                start=min(payments)
+                                                end=max(payments)
+                                        if args[0] in {"gas","water","heat","sewage","misc"}:
+                                                try:
+                                                        service.mass_mod(start,end,args[0],0.0)
+                                                except:
+                                                        print("Invalid command!")
+                                        else:
+                                                print("Invalid key")
+                                case "addr":
+                                        try:
+                                                nr=random.randint(1,20)
+                                                entry=service.payment_creator(float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),float(random.randint(1,20)),datetime.date.today())
+                                                service.add_payment(nr,entry)
+                                        except:
+                                                print("Invalid command!")
+                                case "src":
+                                        match args[0]:
+                                                case "v":
+                                                        try:
+                                                                UI.print_grt(float(args[0]))
+                                                        except:
+                                                                print("Invalid command!")
+                                                case "k":
+                                                        if args[1] in {"gas","water","heat","sewage","misc"}:
+                                                                try:
+                                                                        UI.print_all_key(args[1])
+                                                                except:
+                                                                        print("Invalid command!")
+                                                        else:
+                                                                print("Invalid key")
+                                                case "dv":
+                                                        try:
+                                                                dt=UI.get_date_fs(args[0])
+                                                                UI.print_date_value(dt,float(args[1]))
+                                                        except:
+                                                                print("Invalid command!")
                                                 case _:
-                                                        print("R U rlly a DEV?")
-                                        UI.pak()
-                        case _:
-                                print("Invalid input!")
+                                                        print("Invalid descriptor!")
+                                case "flt":
+                                        match args[0]:
+                                                case "k":
+                                                        if args[1] in {"gas","water","heat","sewage","misc"}:
+                                                                try:
+                                                                        UI.print_without_key(args[1])
+                                                                except:
+                                                                        print("Invalid command!")
+                                                        else:
+                                                                print("Invalid key")
+                                                case "v":
+                                                        UI.print_over_value(float(args[1]))
+                                                case _:
+                                                        print("Invalid descriptor!")
+
+                                case "exit":
+                                        break
+                                case "clearc":
+                                        os.system("cls")
+                                case _:
+                                        print("Function error")
+                                        print("Command:",comm,"\nArgs:",args)
+        
+
+def run():
+        os.system("cls")
+        read_com()
 
 testing.auto_testing()
 run()
