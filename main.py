@@ -46,7 +46,7 @@ def read_com():
                                                 case "h":
                                                         chistory=service.retrieve_changes()
                                                         pprint.pprint(chistory)
-                                case "delk":
+                                case "del k":
                                         payments=service.retrieve_payments()
                                         if payments:
                                                 start=min(payments)
